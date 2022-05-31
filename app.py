@@ -2,7 +2,7 @@ import numpy as np
 from flask import Flask, request, jsonify, render_template
 import pickle
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = False
 model = pickle.load(open('model.pkl', 'rb'))
 
