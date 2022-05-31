@@ -2,13 +2,8 @@ import numpy as np
 from flask import Flask, request, jsonify, render_template
 import pickle
 
-app = Flask(__name__, template_folder="templates")
-app.config["JSONIFY_PRETTYPRINT_REGULAR"] = False
+app = Flask(__name__)
 model = pickle.load(open('model.pkl', 'rb'))
-
-@app.route('/')
-def home():
-    return render_template('index.html')
 
 @app.route('/predict',methods=['POST'])
 def predict():
@@ -21,10 +16,13 @@ def predict():
     prob = model.predict_proba(final_features)
     term_output='{0:.{1}f}'.format(prob[0][1], 2)
     retent_output='{0:.{1}f}'.format(prob[0][0], 2)
+
     if term_output>str(0.5):
-        return render_template('index.html',prediction_text='Attrition probability :{}'.format(term_output))
+        prediction_text='Attrition probability :: {}'.format(term_output)
+        return prediction_text
     else:
-        return render_template('index.html',prediction_text='Retention probability :{}'.format(retent_output))
+        prediction_text='Retention probability :: {}'.format(retent_output)
+        return prediction_text
     
 
 @app.route('/predict_api',methods=['POST'])
